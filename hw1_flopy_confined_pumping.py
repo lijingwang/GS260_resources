@@ -2,6 +2,7 @@
 # Author: Noah Athens
 # Created: April 11, 2018
 # Groundwater Model for GS 260 Quantifying Uncertainty in Subsurface Systems
+# Mac or Linux users will need to change the path specification (line 53)
 
 import numpy as np
 from numpy.fft import fftn, fftshift, ifftn
