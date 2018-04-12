@@ -47,6 +47,10 @@ def simulFFT(nx, ny, nz, mu, sill, m, lx , ly, lz):
     return grid / std * np.sqrt(sill) + mu
 
 def run_modflow(fname, grid_dim, cell_size, hcon, ss, dhdl, pumping_rate):
+    modelname = fname
+    mf = flopy.modflow.Modflow(modelname, exe_name='mf2005') # Windows users
+    #mf = flopy.modflow.Modflow(modelname,namefile_ext='nam',version='mf2005', exe_name='/Users/*/*/*/*/mf2005') # Mac users
+
     # Define the model grid
     nlay = 1
     nrow = grid_dim[0]
@@ -99,9 +103,6 @@ def run_modflow(fname, grid_dim, cell_size, hcon, ss, dhdl, pumping_rate):
             oc_stress_period_data[(kper, kstp)] = ['save head', 'save drawdown', 'save budget']
 
     # Define flopy objects
-    modelname = fname
-    mf = flopy.modflow.Modflow(modelname, exe_name='mf2005') # Windows users
-    #mf = flopy.modflow.Modflow(modelname,namefile_ext='nam',version='mf2005', exe_name='/Users/*/*/*/*/mf2005') # Mac users
     dis = flopy.modflow.ModflowDis(mf, nlay, nrow, ncol, delr=delr, delc=delc,
                                        top=ztop, botm=botm[1:],nper=nper, perlen=perlen, nstp=nstp, steady=steady)
     bas = flopy.modflow.ModflowBas(mf, ibound=ibound, strt=strt)
