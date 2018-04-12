@@ -134,12 +134,12 @@ def main():
     cell_size = 100. # square cell size [m]
     variogram_range = 25 # [cells]
     variogram_model = 'Gaussian' # Gaussian/Exponential
-    log10_mean_hcon = -1 # hydraulic conductivity mean [log10]
-    log10_var_hcon = 0.5 # hydraulic conductivity variance [log10]
+    log10_mean_hcon = -1 # hydraulic conductivity mean [log10 m/d]
+    log10_var_hcon = 0.5 # hydraulic conductivity variance [log10 m/d]
     hydraulic_gradient = 1e-3 # dh/ dl [m / m]
     pumping_rate = -1000 # production is negative, injection is positive [m3/d]
     sand_width = grid_dim[0] * cell_size # [m]
-    specific_storage = 1e-3 # [1/m]
+    specific_storage = 1e-4 # [1/m]
 
     nrealizations = 10
     hcon_reals = []
@@ -167,7 +167,6 @@ def main():
     bp_reals = np.asarray(bp_reals).T
     ap_reals = np.asarray(ap_reals).T
     well_reals = np.asarray(well_reals).T
-    print hcon_reals.shape
 
     np.savetxt(fname + '_hcon_model.csv', hcon_reals, delimiter=',')
     np.savetxt(fname + '_head_before_pumping.csv', bp_reals, delimiter=',')
