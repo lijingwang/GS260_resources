@@ -133,7 +133,7 @@ def main():
     grid_dim = [100, 100] # row, col
     cell_size = 100. # square cell size [m]
     variogram_range = 25 # [cells]
-    variogram_model = 'Exponential' # Gaussian/Exponential
+    variogram_model = 'Gaussian' # Gaussian/Exponential
     log10_mean_hcon = -1 # hydraulic conductivity mean [log10]
     log10_var_hcon = 0.5 # hydraulic conductivity variance [log10]
     hydraulic_gradient = 1e-3 # dh/ dl [m / m]
@@ -141,7 +141,7 @@ def main():
     sand_width = grid_dim[0] * cell_size # [m]
     specific_storage = 1e-3 # [1/m]
 
-    nrealizations = 5
+    nrealizations = 10
     hcon_reals = []
     bp_reals = []
     ap_reals = []
@@ -161,8 +161,6 @@ def main():
         bp_reals.append(head_bp.flatten())
         ap_reals.append(head_ap.flatten())
         well_reals.append(ts_well.flatten())
-
-
 
     # Save outputs to file
     hcon_reals = np.asarray(hcon_reals).T
