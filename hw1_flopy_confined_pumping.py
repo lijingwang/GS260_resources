@@ -169,10 +169,10 @@ def main():
     well_reals = np.asarray(well_reals).T
     print hcon_reals.shape
 
-    np.savetxt('hcon_model.csv', hcon_reals, delimiter=',')
-    np.savetxt('head_before_pumping.csv', bp_reals, delimiter=',')
-    np.savetxt('head_after_pumping.csv', ap_reals, delimiter=',')
-    np.savetxt('well_timeseries.csv', well_reals, delimiter=',')
+    np.savetxt(fname + '_hcon_model.csv', hcon_reals, delimiter=',')
+    np.savetxt(fname + '_head_before_pumping.csv', bp_reals, delimiter=',')
+    np.savetxt(fname + '_head_after_pumping.csv', ap_reals, delimiter=',')
+    np.savetxt(fname + '_well_timeseries.csv', well_reals, delimiter=',')
 
 
 if __name__ == '__main__':
