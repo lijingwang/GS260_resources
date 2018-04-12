@@ -141,22 +141,40 @@ def main():
     sand_width = grid_dim[0] * cell_size # [m]
     specific_storage = 1e-3 # [1/m]
 
-    # Generate hydraulic conductivity spatial model
-    log10_hcon = simulFFT(grid_dim[1], grid_dim[0], 1, log10_mean_hcon, log10_var_hcon, variogram_model, variogram_range, variogram_range, 1)
-    hcon = 10**log10_hcon
+    nrealizations = 5
+    hcon_reals = []
+    bp_reals = []
+    ap_reals = []
+    well_reals = []
+    for i in range(nrealizations):
+        # Generate hydraulic conductivity spatial model
+        log10_hcon = simulFFT(grid_dim[1], grid_dim[0], 1, log10_mean_hcon, log10_var_hcon, variogram_model, variogram_range, variogram_range, 1)
+        hcon = 10**log10_hcon
 
-    # Add shale border to hydraulic conductivity model
-    hcon = add_shale_border(hcon, sand_width, cell_size, 1e-7)
-    hcon = hcon[np.newaxis, :, :] # new dimension for modflow (layer, row, col)
+        # Add shale border to hydraulic conductivity model
+        hcon = add_shale_border(hcon, sand_width, cell_size, 1e-7)
+        hcon = hcon[np.newaxis, :, :] # new dimension for modflow (layer, row, col)
 
-    # Run groundwater model
-    head_bp, head_ap, ts_well = run_modflow(fname, grid_dim, cell_size, hcon, specific_storage, hydraulic_gradient, pumping_rate)
+        # Run groundwater model
+        head_bp, head_ap, ts_well = run_modflow(fname, grid_dim, cell_size, hcon, specific_storage, hydraulic_gradient, pumping_rate)
+        hcon_reals.append(hcon.flatten())
+        bp_reals.append(head_bp.flatten())
+        ap_reals.append(head_ap.flatten())
+        well_reals.append(ts_well.flatten())
+
+
 
     # Save outputs to file
-    np.savetxt('hcon_model.csv', np.squeeze(hcon).flatten())
-    np.savetxt('head_before_pumping.csv', head_bp.flatten())
-    np.savetxt('head_after_pumping.csv', head_ap.flatten())
-    np.savetxt('well_timeseries.csv', ts_well)
+    hcon_reals = np.asarray(hcon_reals).T
+    bp_reals = np.asarray(bp_reals).T
+    ap_reals = np.asarray(ap_reals).T
+    well_reals = np.asarray(well_reals).T
+    print hcon_reals.shape
+
+    np.savetxt('hcon_model.csv', hcon_reals, delimiter=',')
+    np.savetxt('head_before_pumping.csv', bp_reals, delimiter=',')
+    np.savetxt('head_after_pumping.csv', ap_reals, delimiter=',')
+    np.savetxt('well_timeseries.csv', well_reals, delimiter=',')
 
 
 if __name__ == '__main__':
